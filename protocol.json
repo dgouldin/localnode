@@ -20,5 +20,6 @@
       'Cookie': 'whatever',
     },
     content: 'some-blob',
+    dataUri: 'data:image/jpg;base64,base64craphere'
   }
 }

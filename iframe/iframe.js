@@ -31,31 +31,36 @@ $(document).ready(function() {
       console.log(this, e);
       var builder = new BlobBuilder(),
           reader = new FileReader(),
+          status = this.status,
           headers = parseHeaders(this.getAllResponseHeaders()),
           contentType = headers['content-type'] || 'text/plain',
           isText = contentType.indexOf('text') === 0,
           blob, content, response;
 
+      function sendResponse(result) {
+        var response = {
+          token: request.token,
+          status: status,
+          headers: headers,
+          content: result.content,
+          dataUri: result.dataUri
+        };
+
+        sourceWindow.postMessage(JSON.stringify({
+          response: response
+        }), TARGET_ORIGIN);
+      }
+
       if (isText) {
-        content = this.responseText;
+        sendResponse({content: this.responseText});
       } else {
+        reader.onload = function(e) {
+          sendResponse({dataUri: e.target.result});
+        }
         builder.append(this.response);
         blob = builder.getBlob(contentType);
         reader.readAsDataURL(blob);
-        content = reader.result;
       }
-
-      response = {
-        token: request.token,
-        status: this.status,
-        headers: headers,
-        content: content,
-        isText: isText,
-      };
-
-      sourceWindow.postMessage(JSON.stringify({
-        response: response
-      }), TARGET_ORIGIN);
     }
     client.send(request.body);
   }, false);
