@@ -2,8 +2,9 @@ var socket,
   express = require('express'),
   creationix = require('creationix'),
   fs = require('fs'),
-  server = http.createServer(
-    express.logger(),
+  url = require('url'),
+  server = express.createServer(
+//    express.logger(),
     proxyHandler,
     express.bodyParser(),
     express.cookieParser(),
@@ -14,17 +15,9 @@ var socket,
   
 server.listen(80);
 
-app.all('*', function(req, res) {
-  fs.readFile(__dirname + '/index.html',
-    function (err, data) {
-      if (err) {
-        res.writeHead(500);
-        return res.end('Error loading index.html');
-      }
-
-      res.writeHead(200);
-      res.end(data);
-    });  
+server.all('*', function(req, res) {
+  res.writeHead(200);
+  res.end('I AM LOCALNODE!');
 });
 
 
@@ -36,7 +29,8 @@ io.sockets.on('connection', function (sock) {
 
 
 function proxyHandler(req, res, next) {
-  if (url.parse(req.url).hostname.split('.').length <= 2) next();
+  var host = req.headers.host;
+  if (host.split('.').length <= 2) return next();
 
   console.log('headers');
   socket.emit('headers', {
