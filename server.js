@@ -16,7 +16,7 @@ var socket,
   io = require('socket.io').listen(server);
 
 //record deploy
-nko('II/wSAPh+H5/zPP2')
+nko('II/wSAPh+H5/zPP2');
 
 server.listen(80);
 
@@ -24,7 +24,6 @@ server.all('*', function(req, res) {
   res.writeHead(200);
   res.end('I AM LOCALNODE!');
 });
-
 
 // need to associate a socket with a subdomain
 io.sockets.on('connection', function (sock) {
