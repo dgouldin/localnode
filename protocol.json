@@ -1,0 +1,19 @@
+{
+  request: {
+    url: '/path/to/resource/#hash?querystring=yup',
+    method: 'GET|POST',
+    headers: {
+      'Content-Type': 'text/html',
+      'Cookie': 'whatever',
+    },
+    body: 'some-blob',
+  },
+  response: {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html',
+      'Cookie': 'whatever',
+    }
+    content: 'some-blob',
+  }
+}
