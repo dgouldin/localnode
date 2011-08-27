@@ -18,7 +18,7 @@
     headers: {
       'Content-Type': 'text/html',
       'Cookie': 'whatever',
-    }
+    },
     content: 'some-blob',
   }
 }
