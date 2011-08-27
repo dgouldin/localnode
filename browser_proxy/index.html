@@ -1,7 +1,10 @@
 <html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  </head>
   <body>
     <iframe src="http://iframe.localno.de:8000/iframe.html"></iframe>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript">
     // The user will set their desired origin.
     var TARGET_ORIGIN = 'http://iframe.localno.de:8000';
@@ -13,7 +16,7 @@
         data = JSON.stringify({
           request: {
             token: 'some-unique-identifier',
-            url: '/response.html',
+            url: '/helmet_cat.png',
             method: 'GET',
             headers: {},
             body: ''
