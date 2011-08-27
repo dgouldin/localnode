@@ -16,6 +16,7 @@ var socket,
   io = require('socket.io').listen(server);
 
 //record deploy
+export NODE_ENV=production
 nko('II/wSAPh+H5/zPP2');
 
 server.listen(80);
