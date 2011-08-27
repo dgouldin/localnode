@@ -1,13 +1,16 @@
 {
-  request: {
+  headers: {
     url: '/path/to/resource/#hash?querystring=yup',
     method: 'GET|POST',
     headers: {
       'Content-Type': 'text/html',
       'Cookie': 'whatever',
-    },
-    body: 'some-blob',
+    }
   },
+  data: {
+  	chunk: 'some-blob'
+  },
+  end: {},
   response: {
     statusCode: 200,
     headers: {
