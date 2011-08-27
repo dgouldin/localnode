@@ -1,5 +1,6 @@
 {
   headers: {
+    token: 'some-unique-identifier',
     url: '/path/to/resource/#hash?querystring=yup',
     method: 'GET|POST',
     headers: {
@@ -12,7 +13,8 @@
   },
   end: {},
   response: {
-    statusCode: 200,
+    token: 'some-unique-identifier',
+    status: 200,
     headers: {
       'Content-Type': 'text/html',
       'Cookie': 'whatever',
