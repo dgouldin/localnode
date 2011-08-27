@@ -5,6 +5,7 @@ var socket,
   http = require('http'),
   fs = require('fs'),
   url = require('url'),
+  pendingResponses = {};
   server = express.createServer(
 //    express.logger(),
     proxyHandler,
@@ -31,14 +32,24 @@ server.all('*', function(req, res) {
 
 // need to associate a socket with a subdomain
 io.sockets.on('connection', function (sock) {
-  debugger;
   socket = sock;
+  socket.on('response', function(data) {
+    debugger;
+    console.log('socket.io response received');
+    res = pendingResponses[data.token];
+    res.writeHead(data.status, data.headers);
+    res.end(data.content);
+    delete pendingResponses[data.token];
+  });
 });
 
 
 function proxyHandler(req, res, next) {
   var host = req.headers.host,
     token = Math.random();
+
+  pendingResponses[token] = res;
+  // TODO: delete response on timeout
   if (host.split('.').length <= 2) return next();
 
   console.log('headers');
@@ -64,10 +75,6 @@ function proxyHandler(req, res, next) {
     });
   });
   
-  socket.on('response', function(data) {
-    res.writeHead(data.status, data.headers);
-    res.end(data.content);
-  });
 }
 
 

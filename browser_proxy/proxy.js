@@ -34,8 +34,11 @@ $(document).ready(function() {
     if (e.origin !== TARGET_ORIGIN) {
       return; // unauthorized
     }
-    //TODO: add token
-    socket.emit('response', JSON.parse(e.data).response);
+
+    var data = JSON.parse(e.data),
+        response = data.response;
+    response.token = data.token;
+    socket.emit('response', response);
 
   });
 });
