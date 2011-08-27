@@ -16,7 +16,10 @@ var socket,
   io = require('socket.io').listen(server);
 
 //record deploy
-nko('II/wSAPh+H5/zPP2');
+nko('II/wSAPh+H5/zPP2', function(err, res) {
+  if (err) throw err
+  res.on('data', function(d) { console.log(d.toString()); });
+});
 
 server.listen(80);
 
