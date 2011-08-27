@@ -1,6 +1,8 @@
 var socket,
+  nko = require('nko'),
   express = require('express'),
   creationix = require('creationix'),
+  http = require('http'),
   fs = require('fs'),
   server = http.createServer(
     express.logger(),
@@ -11,7 +13,10 @@ var socket,
     creationix.static("/", __dirname + '/public', "index.html")
   ),
   io = require('socket.io').listen(server);
-  
+
+//record deploy
+nko('II/wSAPh+H5/zPP2')
+
 server.listen(80);
 
 app.all('*', function(req, res) {
