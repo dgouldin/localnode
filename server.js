@@ -15,6 +15,7 @@ var socket,
   ),
   io = require('socket.io').listen(server);
 
+process.env['NODE_ENV'] = 'production';
 //record deploy
 nko('II/wSAPh+H5/zPP2', function(err, res) {
   if (err) throw err
