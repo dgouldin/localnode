@@ -19,6 +19,7 @@ $(document).ready(function() {
 
     var sourceWindow = e.source,
         data = JSON.parse(e.data),
+        token = data.token,
         request = data.request,
         client = new XMLHttpRequest();
 
@@ -39,7 +40,6 @@ $(document).ready(function() {
 
       function sendResponse(result) {
         var response = {
-          token: request.token,
           status: status,
           headers: headers,
           content: result.content,
@@ -47,6 +47,7 @@ $(document).ready(function() {
         };
 
         sourceWindow.postMessage(JSON.stringify({
+          token: token,
           response: response
         }), TARGET_ORIGIN);
       }

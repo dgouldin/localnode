@@ -47,14 +47,14 @@ function proxyHandler(req, res, next) {
     headers: req.headers,
   });
   
-  socket.on('data', function(chunk) {
+  req.on('data', function(chunk) {
     console.log(chunk);
     socket.emit('data', chunk);
   });
   
-  socket.on('end', function() {
+  req.on('end', function() {
     console.log('end');
-    socket.emit('end', chunk);
+    socket.emit('end');
   });
   
   socket.on('response', function(data) {
