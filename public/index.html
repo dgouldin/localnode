@@ -1,0 +1,15 @@
+<html>
+<head>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('data', function (data) {
+    debugger;
+    socket.emit('clientData', { my: 'data' });
+  });
+</script>
+</head>
+<body>
+<h1>HELLO!</h1>
+</body>
+</html>
