@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "nko": "*",
+    "other-awesome-stuff": "2.1.4"
+  }
+}
