@@ -1,9 +1,8 @@
 $(document).ready(function() {
   var socket = io.connect('http://localhost:80'), // TODO: real server address here
-      pendingRequests = {}; //TODO: send chunks via postMessage as we receive them
-  socket.on('connection', function () {
-    console.log('socket.io connected!');
-  });
+      pendingRequests = {}, //TODO: send chunks via postMessage as we receive them
+      iframe = $('iframe').get(0);
+
   socket.on('headers', function(data) {
     console.log('headers message received');
     pendingRequests[data.token] = {
@@ -19,13 +18,14 @@ $(document).ready(function() {
   socket.on('data', function(data) {
     console.log('data message received');
     if (pendingRequests[data.token]) {
-      pendingRequests[data.token].request.body += data.data.chunk;
+      pendingRequests[data.token].request.body += data.chunk;
     }
   });
   socket.on('end', function (data) {
     console.log('end message received');
     if (pendingRequests[data.token]) {
-      iframe.contentWindow.postMessage(JSON.stringify(data), TARGET_ORIGIN);
+      iframe.contentWindow.postMessage(
+        JSON.stringify(pendingRequests[data.token]), TARGET_ORIGIN);
     }
   });
 
@@ -34,7 +34,8 @@ $(document).ready(function() {
     if (e.origin !== TARGET_ORIGIN) {
       return; // unauthorized
     }
-    socket.emit('response', JSON.parse(e.data));
+    //TODO: add token
+    socket.emit('response', JSON.parse(e.data).response);
 
   });
 });

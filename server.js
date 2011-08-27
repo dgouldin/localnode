@@ -37,28 +37,35 @@ io.sockets.on('connection', function (sock) {
 
 
 function proxyHandler(req, res, next) {
-  var host = req.headers.host;
+  var host = req.headers.host,
+    token = Math.random();
   if (host.split('.').length <= 2) return next();
 
   console.log('headers');
   socket.emit('headers', {
+    token: token,
     url: req.url,
     method: req.method,
-    headers: req.headers,
+    headers: req.headers
   });
   
   req.on('data', function(chunk) {
     console.log(chunk);
-    socket.emit('data', chunk);
+    socket.emit('data', {
+      token: token,
+      chunk: chunk
+    });
   });
   
   req.on('end', function() {
     console.log('end');
-    socket.emit('end');
+    socket.emit('end', {
+      token: token
+    });
   });
   
   socket.on('response', function(data) {
-    res.writeHead(data.statusCode, data.headers);
+    res.writeHead(data.status, data.headers);
     res.end(data.content);
   });
 }
