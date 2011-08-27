@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <iframe src="http://iframe.localno.de:8000/iframe.html"></iframe>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript">
+    // The user will set their desired origin.
+    var TARGET_ORIGIN = 'http://iframe.localno.de:8000';
+    </script>
+    <script type="text/javascript" src="proxy.js"></script>
+    <script type="text/javascript">
+    // This is a simple test of how the round trip works.
+    var iframe = $('iframe').get(0),
+        data = JSON.stringify({
+          request: {
+            token: 'some-unique-identifier',
+            url: '/response.html',
+            method: 'GET',
+            headers: {},
+            body: ''
+          }
+        });
+    iframe.contentWindow.postMessage(data, TARGET_ORIGIN);
+    </script>
+  </body>
+</html>
