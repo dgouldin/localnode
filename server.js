@@ -19,6 +19,7 @@ nko('II/wSAPh+H5/zPP2')
 
 server.listen(80);
 
+var app = express.createServer();
 app.all('*', function(req, res) {
   fs.readFile(__dirname + '/index.html',
     function (err, data) {
