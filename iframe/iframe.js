@@ -1,3 +1,45 @@
+function arrayBufferBase64(raw, mimetype) {
+  var base64 = '';
+  var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  var bytes = new Uint8Array(raw);
+  var byteLength = bytes.byteLength;
+  var byteRemainder = byteLength % 3;
+  var mainLength = byteLength - byteRemainder;
+  var a, b, c, d;
+  var chunk;
+
+  // Main loop deals with bytes in chunks of 3
+  for (var i = 0; i < mainLength; i = i + 3) {
+    // Combine the three bytes into a single integer
+    chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+    // Use bitmasks to extract 6-bit segments from the triplet
+    a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
+    b = (chunk & 258048) >> 12; // 258048 = (2^6 - 1) << 12
+    c = (chunk & 4032) >> 6; // 4032 = (2^6 - 1) << 6
+    d = chunk & 63; // 63 = 2^6 - 1
+    // Convert the raw binary segments to the appropriate ASCII encoding
+    base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
+  }
+  // Deal with the remaining bytes and padding
+  if (byteRemainder == 1) {
+    chunk = bytes[mainLength];
+    a = (chunk & 252) >> 2 // 252 = (2^6 - 1) << 2;
+    // Set the 4 least significant bits to zero
+    b = (chunk & 3) << 4 // 3 = 2^2 - 1;
+    base64 += encodings[a] + encodings[b] + '==';
+  }
+  else if (byteRemainder == 2) {
+    chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) ;
+    // Use bitmasks to extract 6-bit segments from the triplet
+    a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
+    b = (chunk & 258048) >> 12; // 258048 = (2^6 - 1) << 12
+    c = (chunk & 4032) >> 6; // 4032 = (2^6 - 1) << 6
+    base64 += encodings[a] + encodings[b] + encodings[c] + '=';
+  }
+  return base64;
+}
+
+
 window.BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
 
 $(document).ready(function() {
@@ -19,45 +61,37 @@ $(document).ready(function() {
 
     var sourceWindow = e.source,
         data = JSON.parse(e.data),
+        token = data.token,
         request = data.request,
-        client = new XMLHttpRequest();
+        xhr = new XMLHttpRequest();
 
     console.log('request received', request);
-    client.open(request.method, request.url);
+    xhr.open(request.method, request.url);
+    xhr.responseType = 'arraybuffer';
+    request.headers['cache-control'] = 'no-cache';
     $.each(request.headers, function(k, v) {
-      client.setRequestHeader(k, v);
+      xhr.setRequestHeader(k, v);
     });
-    client.onload = function(e) {
-      console.log(this, e);
-      var builder = new BlobBuilder(),
-          reader = new FileReader(),
+    xhr.onload = function(e) {
+      var status = this.status,
           headers = parseHeaders(this.getAllResponseHeaders()),
           contentType = headers['content-type'] || 'text/plain',
-          isText = contentType.indexOf('text') === 0,
-          blob, content, response;
+          content, response;
 
-      if (isText) {
-        content = this.responseText;
-      } else {
-        builder.append(this.response);
-        blob = builder.getBlob(contentType);
-        reader.readAsDataURL(blob);
-        content = reader.result;
-      }
-
-      response = {
-        token: request.token,
-        status: this.status,
+      console.log(this.response);
+      var response = {
+        status: status,
         headers: headers,
-        content: content,
-        isText: isText,
-      };
+        content: arrayBufferBase64(this.response, contentType),
+      }
+      console.log('response.content', response.content);
 
       sourceWindow.postMessage(JSON.stringify({
+        token: token,
         response: response
       }), TARGET_ORIGIN);
     }
-    client.send(request.body);
+    xhr.send(request.body);
   }, false);
 });
 

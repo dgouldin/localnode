@@ -5,6 +5,7 @@ var socket,
   http = require('http'),
   fs = require('fs'),
   url = require('url'),
+  pendingResponses = {};
   server = express.createServer(
 //    express.logger(),
     proxyHandler,
@@ -15,8 +16,12 @@ var socket,
   ),
   io = require('socket.io').listen(server);
 
+process.env['NODE_ENV'] = 'production';
 //record deploy
-nko('II/wSAPh+H5/zPP2')
+nko('II/wSAPh+H5/zPP2', function(err, res) {
+  if (err) throw err
+  res.on('data', function(d) { console.log(d.toString()); });
+});
 
 server.listen(80);
 
@@ -25,39 +30,63 @@ server.all('*', function(req, res) {
   res.end('I AM LOCALNODE!');
 });
 
-
 // need to associate a socket with a subdomain
 io.sockets.on('connection', function (sock) {
-  debugger;
   socket = sock;
+  socket.on('response', function(data) {
+    var contentType = data.headers['content-type'],
+        buffer = new Buffer(data.content, 'base64'),
+        res;
+
+    // set text mimetypes to utf-8 charset
+    if(contentType.indexOf('text') === 0 && contentType.indexOf('charset') === -1) {
+      contentType += '; charset=utf-8';
+      data.headers['content-type'] = contentType;
+    }
+
+    data.headers['content-length'] = buffer.length;
+    console.log('socket.io response received');
+
+    res = pendingResponses[data.token];
+    res.writeHead(data.status, data.headers);
+    res.end(buffer);
+
+    delete pendingResponses[data.token];
+  });
 });
 
 
 function proxyHandler(req, res, next) {
-  var host = req.headers.host;
+  var host = req.headers.host,
+    token = Math.random();
+
+  pendingResponses[token] = res;
+  // TODO: delete response on timeout
   if (host.split('.').length <= 2) return next();
 
   console.log('headers');
   socket.emit('headers', {
+    token: token,
     url: req.url,
     method: req.method,
-    headers: req.headers,
+    headers: req.headers
   });
   
-  socket.on('data', function(chunk) {
+  req.on('data', function(chunk) {
     console.log(chunk);
-    socket.emit('data', chunk);
+    socket.emit('data', {
+      token: token,
+      chunk: '' + chunk
+    });
   });
   
-  socket.on('end', function() {
+  req.on('end', function() {
     console.log('end');
-    socket.emit('end', chunk);
+    socket.emit('end', {
+      token: token
+    });
   });
   
-  socket.on('response', function(data) {
-    res.writeHead(data.statusCode, data.headers);
-    res.end(data.content);
-  });
 }
 
 
