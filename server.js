@@ -45,7 +45,7 @@ server.all('*', function(req, res) {
 
 // need to associate a socket with a subdomain
 
-var subdomRE = /([^.])\..+\..+/;
+var subdomRE = /([^.]+)\..+\..+/;
 function getSubDom(host) {
   var m = subdomRE.exec(host);
   if (m) {
