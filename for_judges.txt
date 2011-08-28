@@ -1,0 +1,21 @@
+Description
+-----------
+Web developers often work in a local environment, serving web applications off of their local machines as they code. This works well for solitary projects, but what happens when you need to share your work with somebody over the internet? What if you're not ready to deploy your work, or you don't have a server environment configured yet?
+
+That's where localno.de comes in. We provide a web-based proxy to allow you to serve your localhost off a publicly available subdomain on our site.  Just host a static html file we provide, choose your subdomain name, and go. Your browser *is* your proxy; close the tab, and the subdomain is released.
+
+Directions to judges
+--------------------
+NOTE: Only chrome is supported for the web proxy.  End users browsing the provided subdomain can use any browser they like.
+
+1. Start a web server on your local box (any port is fine).
+2. Navigate to http://localno.de/
+3. Download the localnode.html file linked to on the homepage.
+4. Serve the downloaded localnode.html statically from your local webserver.
+5. Give us the url to localnode.html on your local box.  (When we successfully find it, the "Step 1" box will turn green.)
+6. Pick your desired subdomain. (If the subdomain is not in use, the "Step 2" box will turn green.)
+7. Hit the "Start" button to start the proxy. (We'll confirm with an alert that the proxy has successfully started.)
+8. Open another browser or tab and browse to the subdomain you chose (http://yourname.localno.de/).
+
+Your subdomain will be available to anyone on the internet as long as you keep the proxy tab and your local webserver running.
+
