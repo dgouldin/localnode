@@ -66,7 +66,7 @@ $("#howitworks-id").fancybox();
 
 
 $(function() {
-  LN.request = function(msg, options, cb) {
+  window.request = function(msg, options, cb) {
     var host = options.host || '127.0.0.1';
     var s = new FlashSocket({
         on_data: function(data) {
@@ -91,8 +91,60 @@ $(function() {
     });
     s.connect('localdevno.de', 80);
     console.log(s);
-  }
-  request('GET /MellonHelmet.jpg\n\n', function(data) {
-    console.log(data);
+  };
+//  request('GET /MellonHelmet.jpg\n\n', function(data) {
+//    console.log(data);
+//  });
+  
+  
+  var host = '127.0.0.1';
+  var subdomain = 'crabdude';
+
+  $('iframe').attr('src', host);
+
+  var socket = io.connect('http://localno.de'),
+      pendingRequests = {}, //TODO: send chunks via postMessage as we receive them
+      iframe = $('iframe').get(0);
+
+  socket.on('headers', function(data) {
+    console.log('headers message received');
+    pendingRequests[data.token] = {
+      token: data.token,
+      request: {
+        url: data.url,
+        method: data.method,
+        headers: data.headers,
+        body: ''
+      }
+    };
   });
+  socket.on('data', function(data) {
+    console.log('data message received');
+    if (pendingRequests[data.token]) {
+      pendingRequests[data.token].request.body += data.chunk;
+    }
+  });
+  socket.on('end', function (data) {
+    console.log('end message received');
+    if (pendingRequests[data.token]) {
+      iframe.contentWindow.postMessage(
+        JSON.stringify(pendingRequests[data.token]), host);
+    }
+  });
+
+  window.addEventListener("message", function(e) {
+    console.log('proxy message received', e);
+    if (e.origin !== host) {
+      return; // unauthorized
+    }
+
+    var data = JSON.parse(e.data),
+        response = data.response;
+    response.token = data.token;
+    socket.emit('response', response);
+
+  });
+
+  console.log("You're all set!");
+  return false;
 });

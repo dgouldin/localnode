@@ -4,20 +4,20 @@
         <title>LocalNode - Access to your localhost from everywhere</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href='http://fonts.googleapis.com/css?family=Delius+Swash+Caps|Gruppo|Ubuntu:400,400italic,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" type="text/css" href="validationEngine.jquery.css" />
-    	<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" type="text/css" href="/vendor/validationEngine.jquery.css" />
+    		<link rel="stylesheet" type="text/css" href="/vendor/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="index.css" />
     </head>
     <body>
 		   	<object
 		    id="socket_bridge" class="hidden"
 		    classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
 		    codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0">
-				    <param name="movie" value="socket_bridge.swf?onloadcallback=test" />
+				    <param name="movie" value="/swf/socket_bridge.swf?onloadcallback=test" />
 				    <param name="allowScriptAccess" value="always" />
 				    <embed
 				        class="hidden"
-				        src="socket_bridge.swf?onloadcallback=test"
+				        src="/swf/socket_bridge.swf?onloadcallback=test"
 				        allowScriptAccess="always"
 				        type="application/x-shockwave-flash"
 				        pluginspage="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"> 
@@ -77,7 +77,7 @@
                           <li><p><a id="proxy-start" href="proxy">Start Your Proxy</a></p></li>
                        </ol>
                    </form>
-                   Need <a id="howitworks-id" href="howitworks.png">More info</a>?
+                   Need <a id="howitworks-id" href="/vendor/howitworks.png">More info</a>?
                 </p>
                 </div>
             </div>
@@ -132,11 +132,12 @@
         <div id="footer">
             
         </div>
-        <script src="http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.2.min.js"  type="text/javascript" language="javascript"></script>
-        <script src="jquery.placeholder.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
-        <script src="jquery.validationEngine.js"  type="text/javascript" language="javascript"></script>
-        <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-        <script src="site.js"  type="text/javascript" language="javascript"></script>
+        <script src="http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+        <script src="/vendor/jquery.placeholder.min.js"></script>
+        <script src="/vendor/jquery.validationEngine-en.js"></script>
+        <script src="/vendor/jquery.validationEngine.js"></script>
+        <script src="/vendor/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    		<script src="/socket.io/socket.io.js"></script>
+        <script src="/index.js"></script>
     </body>
 </html>

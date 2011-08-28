@@ -1,7 +1,7 @@
 var socket,
+  _ = require('underscore'),
   nko = require('nko'),
   express = require('express'),
-  creationix = require('creationix'),
   http = require('http'),
   fs = require('fs'),
   url = require('url'),
@@ -12,14 +12,16 @@ var socket,
     express.bodyParser(),
     express.cookieParser(),
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
-    creationix.static("/", __dirname + '/public', "index.html")
+    express.static(__dirname + '/public')
   ),
   io = require('socket.io').listen(server);
 
+_.mixin(require('underscore.string'));
+  
 process.env['NODE_ENV'] = 'production';
 //record deploy
 nko('II/wSAPh+H5/zPP2', function(err, res) {
-  if (err) throw err
+  if (err) throw err;
   res.on('data', function(d) { console.log(d.toString()); });
 });
 
@@ -92,19 +94,15 @@ function proxyHandler(req, res, next) {
 
 /*
 
-INITIAL
-1. tie socket to url
-2. connect to browser proxy => FULL CIRCUIT!
-
-WebSockets
-3. Communicate connection & upgrade
-4. pipe 1 to the other
-
-PAGES
-SIGNUP
-5. Create Username & Password
-6. Create configurable Iframe
- - Dynamically create iframe on the fly
- - 
+net.createServer(function(socket) {
+  socket.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+  socket.write("<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n");
+  socket.write("<cross-domain-policy>\n");
+  socket.write("<site-control permitted-cross-domain-policies=\"all\"/>\n");
+  socket.write('<allow-access-from domain="*" to-ports="*" secure="false" />\n');
+  socket.write("</cross-domain-policy>\n");
+  socket.end();
+  console.log("Wrote policy file.");
+}).listen(843);
 
 */

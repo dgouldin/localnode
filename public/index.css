@@ -836,3 +836,12 @@ input, textarea { color: #000; }
 #fancybox-content{
     color: #000;
 }
+
+embed.hidden,
+object.hidden {
+    height: 1px;
+    width: 1px;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+}
