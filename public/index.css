@@ -29,6 +29,10 @@ q:before,q:after {
 }
 abbr,acronym { border:0;
 }
+.bottom-nav {
+  position: absolute;
+  bottom: 0px;
+}
 
 /* 960 Grid */
 
