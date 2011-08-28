@@ -798,8 +798,15 @@ li {
     color: #39CEF6;
 }
 
+.product-description {
+    margin: 10px auto;  
+}
+
+.product-steps, .sign-div {
+    margin: 0px auto;  
+}
 .product-description, .product-steps, .sign-div {
-    margin: 0px auto;
+
     background-color: rgba(255,255,255, 0.10);
     -moz-border-radius: 15px;
     border-radius: 15px;
