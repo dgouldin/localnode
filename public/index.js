@@ -66,7 +66,7 @@ $("#howitworks-id").fancybox();
 
 
 $(function() {
-  window.request = function(msg, options, cb) {
+  LN.request = function(msg, options, cb) {
     var host = options.host || '127.0.0.1';
     var s = new FlashSocket({
         on_data: function(data) {
@@ -91,7 +91,7 @@ $(function() {
     });
     s.connect('localdevno.de', 80);
     console.log(s);
-  };
+  }
   request('GET /MellonHelmet.jpg\n\n', function(data) {
     console.log(data);
   });
