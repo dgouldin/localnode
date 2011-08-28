@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LocalNode - Access to your localhost from everywhere</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href='http://fonts.googleapis.com/css?family=Delius+Swash+Caps|Gruppo|Ubuntu:400,400italic,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="validationEngine.jquery.css" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body>
+        <div class="container_24">
+            <div class="grid_3 prefix_15">
+                <p>
+                  Register
+                </p>
+            </div>
+             <div class="grid_3">
+                <p>
+                  Log in
+                </p>
+            </div>
+             <div class="grid_3">
+                <p>
+                  About
+                </p>
+            </div>
+            <div class="clear"></div>
+                    <div class="grid_24 header">
+                <div class="grid_24 header">
+                </div>
+            </div>
+            <div class="grid_24 header">
+                <h1>
+                    <a href-"http://localno.de"> Localno.de </a>
+                </h1>
+            </div>
+             <div class="grid_24">
+                <p>
+                  Local node let anybody on the internet be able to access your localhost or any address accessible from your localhost that YOU want to share.
+                  <ul>
+                      <li>No deployment</li>
+                      <li>Give QA a direct access to your machine</li>
+                      <li>Share your latest version with who you want</li>
+                  </ul>
+                </p>
+            </div>
+            <div class="clear"></div>
+
+              <div class="grid_12 explaing_video">
+                <iframe width="420" height="345" src="http://www.youtube.com/embed/AOnK3NVnxL8" frameborder="0" allowfullscreen></iframe>
+              </div>
+              <!-- end .grid_12 -->
+              <div class="grid_12">
+                <p>
+                    <form id="signup-form" method="post" action="/signup">
+                        <div>
+                        <label>Username</label>
+                        <input id="username-input" value="" class="validate[minSize[6]]" type="text" name="username" />
+                        </div><div>
+                        <label>Email</label>
+                        <input id="email-input" value="" class="validate[required,custom[email]]" type="text" name="email" />
+                        </div><div>
+                        <label>Password</label>
+                        <input id="password-input" value="" class="validate[rminSize[6]]" type="password" name="pwd" />   
+                        </div>
+                        <input value="Sign Up!" type="submit" name="submit" /> 
+                    </form>
+                </p>
+              </div>
+            <!-- end .grid_12 -->
+            <div class="clear"></div>
+        </div>
+        <div id="footer">
+            
+        </div>
+        <script src="http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.2.min.js"  type="text/javascript" language="javascript"></script>
+        <script src="jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
+        <script src="jquery.validationEngine.js"  type="text/javascript" language="javascript"></script>
+        <script src="site.js"  type="text/javascript" language="javascript"></script>
+    </body>
+</html>
