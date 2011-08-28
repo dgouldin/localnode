@@ -65,7 +65,7 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('setup', function(data, ret) {
     socket.subdomain = data.subdomain;
-    if (undefined === subdomToSocket[socket.subdomain]) {
+    if (undefined !== subdomToSocket[socket.subdomain]) {
       ret(false);
       return;
     }
