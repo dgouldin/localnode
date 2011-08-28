@@ -35,16 +35,20 @@ io.sockets.on('connection', function (sock) {
   socket = sock;
   socket.on('response', function(data) {
     var contentType = data.headers['content-type'],
-        base64;
+        res, content;
     console.log('socket.io response received');
     res = pendingResponses[data.token];
-    res.writeHead(data.status, data.headers);
+
     if (data.content) {
-      res.end(data.content);
+      content = data.content
     } else {
-      base64 = data.dataUri.replace('data:' + contentType + ';base64,', '');
-      res.end(new Buffer(base64, 'base64').toString('binary'));
+      content = new Buffer(data.dataUri, 'base64');
     }
+
+    data.headers['content-length'] = content.length;
+    res.writeHead(data.status, data.headers);
+    res.end(content);
+
     delete pendingResponses[data.token];
   });
 });
