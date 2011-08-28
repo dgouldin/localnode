@@ -81,6 +81,10 @@ function getSubDom(host) {
 
 io.sockets.on('connection', function (socket) {
   socket.on('available', function(data, ret) {
+      if (0 === data.subdomain.length) {
+        ret(false);
+        return;
+      }
       ret(subdomToSocket[data.subdomain] === undefined);
   });
 
