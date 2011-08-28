@@ -25,8 +25,8 @@
   }],
   "licenses": [
   {
-     "type": "BSD",
-     "url": "http://www.opensource.org/licenses/bsd-license.php"
+     "type": "MIT",
+     "url": "http://www.opensource.org/licenses/MIT"
   }],
   "repositories": [
        {
