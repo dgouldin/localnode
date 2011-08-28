@@ -19,6 +19,7 @@ var port = 80,
         res.writeHead(302, {
           'Location': "http://localno.de"
         });
+        res.end();
         return;
       }
       if (!isProduction || req.url !== "/localnode.html") {
