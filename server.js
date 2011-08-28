@@ -12,6 +12,13 @@ var subdomToSocket = {},
     express.bodyParser(),
     express.cookieParser(),
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
+    function(req, res, next) {
+      if (req.url !== "/localnode.html") {
+        return next();
+      }
+      res.setHeader("Content-Disposition", "attachment; filename=localnode.html");
+      return next();
+    },
     express.static(__dirname + '/public')
   ),
   io = require('socket.io').listen(server),
