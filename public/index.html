@@ -9,20 +9,6 @@
         <link rel="stylesheet" type="text/css" href="index.css" />
     </head>
     <body>
-		   	<object
-		    id="socket_bridge" class="hidden"
-		    classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
-		    codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0">
-				    <param name="movie" value="/swf/socket_bridge.swf?onloadcallback=test" />
-				    <param name="allowScriptAccess" value="always" />
-				    <embed
-				        class="hidden"
-				        src="/swf/socket_bridge.swf?onloadcallback=test"
-				        allowScriptAccess="always"
-				        type="application/x-shockwave-flash"
-				        pluginspage="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash">
-				    </embed>
-				</object>
         <div class="container_24">
             <div class="grid_12">
                 <div class="top">
@@ -51,7 +37,7 @@
                   Download and host <a href="/localnode.html">localnode.html</a> at
                   </p>
                   <p>
-                    <span class="url">http://<input id="host-input" type="text" size="30">/localnode.html</span>
+                    <span class="url">http://<input id="host-input" placeholder="eg. localhost" type="text" size="30">/localnode.html</span>
                   </p>
                 </div>
             </div>
@@ -84,18 +70,18 @@
               </div>
                <div class="grid_3">
                   <p>
-                      <a id="single_image" href="howitworks.png">How it works</a>
+                      <a id="howitworks-id" href="howitworks.png">How it works</a>
                   </p>
                 </div>                    
             </div>        
         </div>
+        <iframe id="proxyframe"></iframe>
         <script src="http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
         <script src="/vendor/jquery.placeholder.min.js"></script>
         <script src="/vendor/jquery.validationEngine-en.js"></script>
         <script src="/vendor/jquery.validationEngine.js"></script>
         <script src="/vendor/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    		<script src="/socket.io/socket.io.js"></script>
-        <script src="/index.js"></script>
-        <iframe id="proxyframe"></iframe>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/index.js"></script>   
     </body>
 </html>

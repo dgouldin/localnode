@@ -778,6 +778,13 @@ li {
   margin-left: 30px;
 }
 
+input::-webkit-input-placeholder {
+    color:    #999;
+}
+input:-moz-placeholder {
+    color:    #999;
+}
+
 
 .product-steps {
     width: 80%;

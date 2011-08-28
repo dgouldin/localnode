@@ -1,10 +1,12 @@
-var subdomToSocket = {},
+var port = 80,
+  subdomToSocket = {},
   _ = require('underscore'),
   nko = require('nko'),
   express = require('express'),
   http = require('http'),
   fs = require('fs'),
   url = require('url'),
+  isProduction = false,
   pendingResponses = {};
   server = express.createServer(
 //    express.logger(),
@@ -13,7 +15,7 @@ var subdomToSocket = {},
     express.cookieParser(),
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
     function(req, res, next) {
-      if (req.url !== "/localnode.html") {
+      if (isProduction || req.url !== "/localnode.html") {
         return next();
       }
       res.setHeader("Content-Disposition", "attachment; filename=localnode.html");
@@ -24,26 +26,36 @@ var subdomToSocket = {},
   io = require('socket.io').listen(server),
 
 _.mixin(require('underscore.string'));
-  
-process.env['NODE_ENV'] = 'production';
-//record deploy
-nko('II/wSAPh+H5/zPP2', function(err, res) {
-  if (err) throw err;
-  res.on('data', function(d) { console.log(d.toString()); });
-});
 
-server.get('/localnode.html', function(req, res) {
-  fs.readFile(__dirname + '/public/localnode.tpl', function(err, data) {
-    var content = (''+data).replace('TARGET_HOST', req.query.host);
-    console.log(content);
-    res.writeHead(200, {
-      'Content-Length': data.length,
-      'Content-Type': 'application/octet-stream'
+console.log("NODE_ENV: "+process.env['NODE_ENV']);
+if (!process.env['NODE_ENV'] ){
+    isProduction = true;
+    process.env['NODE_ENV'] = 'production';
+        //record deploy
+    nko('II/wSAPh+H5/zPP2', function(err, res) {
+      if (err) throw err;
+      res.on('data', function(d) { console.log(d.toString()); });
     });
-    res.end(content);
-  });
-});
-server.listen(80);
+    
+    server.get('/localnode.html', function(req, res) {
+      fs.readFile(__dirname + '/public/localnode.tpl', function(err, data) {
+        var content = (''+data).replace('TARGET_HOST', req.query.host);
+        console.log(content);
+        res.writeHead(200, {
+          'Content-Length': data.length,
+          'Content-Type': 'application/octet-stream'
+        });
+        res.end(content);
+      });
+    });    
+    
+} else {
+    port = 8080;
+}
+
+
+server.listen(port);
+console.log("Server started on port:"+port);
 
 server.all('*', function(req, res) {
   res.writeHead(200);

@@ -150,6 +150,10 @@ $(function() {
     }
   });
 
+  socket.on('disconnect', function(data) {
+    console.log('Disconnected');
+  });
+
   window.addEventListener("message", function firstMessage() {
     onIframeLoad();
     window.removeEventListener('message', firstMessage);
