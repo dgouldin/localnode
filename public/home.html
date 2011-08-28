@@ -54,13 +54,16 @@
                 <p>
                    <form id="subdomain-form" method="post" action="startproxy"> 
                        <ol>
-                          <li><p>Host <a id="example-config" href="example_localhost.html">the localhost.html file</a> on your server on http://127.0.0.1/localhost.html</p></li>
+                          <li><p>Enter your local host URL:
+                                <input id="localhost-input" value="http://127.0.0.1" class="validate[required,custom[url]]" type="text" name="subdomain" />
+                                </p>
+                          </li> 
+                          <li><p>Host <a id="example-config" href="example_localhost.html">the localnode.html file</a> on your server on <span class="nicer"><span id="server-address">http://127.0.0.1</span>/localnode.html</span> and <a id="test-config" href="testConfig">test it!</a></p></li>
                           <li><p>Claim your subdomain:
-                                <input id="subdomain-input" placeholder="Subdomain" class="validate[required,custom[onlyLetterNumber],maxSize[20],ajax[ajaxUserCall]]" type="text" name="subdomain" />
+                                <input id="subdomain-input" placeholder="Subdomain" class="validate[required,custom[onlyLetterNumber],maxSize[20],ajax[ajaxSubdomain]]" type="text" name="subdomain" />
                                 </p>
                           </li>
-                          <li><p><a id="test-config" href="testConfig">Test your configuration</a></p></li>
-                          <li><p><a id="proxy-start" href="proxy">Start Your Proxy</a></p></li>
+                          <li><p><a id="proxy-start" href="proxy">Start Your Proxy at <span class="nicer" id="proxy-address">proxy.localno.de/myDomain</span></a></p></li>
                        </ol>
                    </form>
                    Need <a id="howitworks-id" href="howitworks.png">More info</a>?
@@ -123,6 +126,7 @@
         <script src="jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
         <script src="jquery.validationEngine.js"  type="text/javascript" language="javascript"></script>
         <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+        <script src="/socket.io.js" type="text/javascript" charset="utf-8"></script>
         <script src="site.js"  type="text/javascript" language="javascript"></script>
     </body>
 </html>
