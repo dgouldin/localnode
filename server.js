@@ -16,7 +16,7 @@ var port = 80,
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
     function(req, res, next) {
       if (req.headers.host.indexOf("localno.de") === -1) {
-        res.writeHead(301, {
+        res.writeHead(302, {
           'Location': "http://localno.de"
         });
         return;
