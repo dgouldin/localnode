@@ -39,59 +39,105 @@ function arrayBufferBase64(raw, mimetype) {
   return base64;
 }
 
+function parseHeaders(responseHeadersString) {
+  // taken from jQuery
+  var rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg,
+      responseHeaders = {};
+  while((match = rheaders.exec(responseHeadersString))) {
+    responseHeaders[match[1].toLowerCase()] = match[2];
+  }
+  return responseHeaders;
+}
 
 window.BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
 
-$(document).ready(function() {
-  function parseHeaders(responseHeadersString) {
-    // taken from jQuery
-    var rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg,
-        responseHeaders = {};
-    while((match = rheaders.exec(responseHeadersString))) {
-      responseHeaders[match[1].toLowerCase()] = match[2];
-    }
-    return responseHeaders;
-  }
-
+$(function() {
+  var host = 'http://localno.de';
+  top.postMessage('', host);
+  
   window.addEventListener("message", function(e) {
     console.log('iframe message received', e);
-    if (e.origin !== TARGET_ORIGIN) {
+    if (e.origin !== host) {
       return; // unauthorized
     }
 
     var sourceWindow = e.source,
         data = JSON.parse(e.data),
         token = data.token,
-        request = data.request,
-        xhr = new XMLHttpRequest();
-
-    console.log('request received', request);
-    xhr.open(request.method, request.url);
-    xhr.responseType = 'arraybuffer';
-    request.headers['cache-control'] = 'no-cache';
-    $.each(request.headers, function(k, v) {
-      xhr.setRequestHeader(k, v);
-    });
-    xhr.onload = function(e) {
-      var status = this.status,
-          headers = parseHeaders(this.getAllResponseHeaders()),
-          contentType = headers['content-type'] || 'text/plain',
-          content, response;
-
-      console.log(this.response);
-      var response = {
-        status: status,
-        headers: headers,
-        content: arrayBufferBase64(this.response, contentType),
-      }
-      console.log('response.content', response.content);
-
-      sourceWindow.postMessage(JSON.stringify({
-        token: token,
-        response: response
-      }), TARGET_ORIGIN);
+        request = data.request;
+    
+    if (request.method) {
+      doXHR();
+    } else {
+      doSocket();
     }
-    xhr.send(request.body);
+    
+    function doXHR() {
+      var xhr = new XMLHttpRequest();
+
+      console.log('request received', request);
+      xhr.open(request.method, request.url);
+      xhr.responseType = 'arraybuffer';
+      request.headers['cache-control'] = 'no-cache';
+      $.each(request.headers, function(k, v) {
+        xhr.setRequestHeader(k, v);
+      });
+      xhr.onload = function(e) {
+        var status = this.status,
+            headers = parseHeaders(this.getAllResponseHeaders()),
+            contentType = headers['content-type'] || 'text/plain',
+            content, response;
+
+        console.log(this.response);
+        var response = {
+          status: status,
+          headers: headers,
+          content: arrayBufferBase64(this.response, contentType),
+        };
+        console.log('response.content', response.content);
+
+        sourceWindow.postMessage(JSON.stringify({
+          token: token,
+          response: response
+        }), host);
+      };
+      xhr.send(request.body); 
+    }
+
+    function doSocket(msg, options, cb) {
+      var res = '',
+        s = new FlashSocket({
+          on_data: function(data) {
+              console.log(data.length);
+              console.log(data);
+              res += atob(data);
+          },
+          on_io_error: function(msg) {
+              console.log("IO ERROR: "+msg);
+          },
+          on_security_error: function(msg) {
+              console.log("SECURITY ERROR: "+msg);
+          },
+          on_close: function(msg) {
+              console.log(msg);
+              console.log("Connection closed.");
+              sourceWindow.postMessage(JSON.stringify({
+                token: token,
+                response: res
+              }), host);
+          },
+          on_connect: function() {
+              console.log('s1 connect');
+              s.write(msg);
+          }
+      });
+      s.connect(request.url, request.port);
+      console.log(s);
+    }
   }, false);
+  
+//  request('GET /MellonHelmet.jpg\n\n', function(data) {
+//    console.log(data);
+//  });
 });
 

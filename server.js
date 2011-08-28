@@ -100,6 +100,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 function proxyHandler(req, res, next) {
+  debugger;
   var host = req.headers.host,
     token = Math.random(),
     socket;
