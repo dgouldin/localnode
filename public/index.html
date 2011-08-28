@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="index.css" />
     </head>
     <body>
+      <iframe id="proxyframe" style="height: 1px; width: 1px;"></iframe>
 		   	<object
 		    id="socket_bridge" class="hidden"
 		    classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
@@ -24,7 +25,59 @@
 				    </embed>
 				</object>
         <div class="container_24">
-            <div class="top-bar">
+            <div class="grid_12">
+                <div class="top">
+                    <h1>
+                        <a href="http://localno.de">Localno.de</a>
+                    </h1>
+                    <h3>Think locally. Deploy globally.</h3>
+                </div>
+              </div>
+             <div class="grid_10 prefix_2">
+               <div class="product-description">
+                <p>
+                  Serve a local site with no deployment:
+                  <ul>
+                      <li>User test half-baked code</li>
+                      <li>Share your latest hack</li>
+                  </ul>
+                </p>
+               </div>
+             </div>
+             <div class="grid_24" id="step-1">
+                <div class="header">
+                  <h2>Step 1</h2>
+                </div>
+                <div class="product-steps">
+                  <p>
+                  Download and host <a href="/localnode.html">localnode.html</a> at
+                  </p>
+                  <p>
+                    <span class="url">http://<input id="host-input" type="text" size="30">/localnode.html</span>
+                  </p>
+                </div>
+            </div>
+            <div class="clear spacediv32"> dd</div>
+
+             <div class="grid_24" id="step-2" style="display: none">
+                <div class="header">
+                  <h2>Step 2</h2>
+                </div>
+                <div class="product-steps">
+                  <p>
+                  Choose your subdomain
+                  </p>
+                  <p>
+                    <span class="url">http://<input id="subdomain-input" type="text" size="20">.localno.de/</span>
+                  </p>
+                </div>
+                <div class="go">
+                  <button disabled="disabled" id="subdomain-submit">Start</button>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div class="bottom-nav">
                 <div class="grid_3 prefix_15">
                     <p>
                       <a href="home.html">Home</a>
@@ -42,58 +95,6 @@
                 </div>
             <div>
             <div class="clear"></div>
-            <div class="grid_24">
-                <div class="header">   
-                    <h1>
-                        <a href-"http://localno.de"> Localno.de </a>
-                    </h1>
-                    <h2>Think locally. Deploy globally.</h2>
-                </div>
-             </div>
-             <div class="grid_24">
-               <div class="product-description">
-                <p>
-                  Serve a local site with no deployment:
-                  <ul>
-                      <li>User test half-baked code</li>
-                      <li>Share your latest hack</li>
-                  </ul>
-                </p>
-               </div>
-             </div>
-             <div class="grid_24">
-                <div class="header">
-                  <h1>
-                      Do it:
-                  </h1>
-                </div>
-                <div class="product-steps">
-                  <p>
-                     <form id="subdomain-form" method="post" action="startproxy">
-                         <ol>
-                            <li><p>Host the <a id="example-config" href="/localnode.html">localnode.html file</a> on your server on http:// <input id="host-input" value="127.0.0.1:80"/> /localnode.html</p></li>
-                            <li><p>Claim your subdomain:
-                                  <input id="subdomain-input" placeholder="Subdomain" class="validate[required,custom[onlyLetterNumber],maxSize[20],ajax[ajaxUserCall]]" type="text" name="subdomain" />
-                                  <input id="subdomain-submit" value="Claim" class="validate[required,custom[onlyLetterNumber],maxSize[20],ajax[ajaxUserCall]]" type="submit" name="subdomain_submit" />
-                                  </p>
-                            </li>
-                            <li><p><a id="test-config" href="testConfig">Test your configuration</a></p></li>
-                            <li><p><a id="proxy-start" href="proxy">Start Your Proxy</a></p></li>
-                         </ol>
-                     </form>
-                     Need <a id="howitworks-id" href="/howitworks.png">More info</a>?
-                  </p>
-                </div>
-            </div>
-            <div class="clear spacediv32"> dd</div>
-
-              <div class="grid_12 explaining_video">
-                <iframe width="420" height="345" src="http://www.youtube.com/embed/AOnK3NVnxL8" frameborder="0" allowfullscreen></iframe>
-              </div>
-            <div class="clear"></div>
-        </div>
-        <div id="footer">
-            
         </div>
         <script src="http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
         <script src="/vendor/jquery.placeholder.min.js"></script>

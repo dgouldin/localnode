@@ -1,5 +1,5 @@
 $(function() {
-  var $proxyframe;
+  var $proxyframe = $('#proxyframe');
   
   //See https://github.com/posabsolute/jQuery-Validation-Engine (for validation)
   var ajaxSubdomain = {
@@ -45,14 +45,6 @@ $(function() {
   });
   
   
-  //$("#example-config").fancybox();
-  $("#example-config").click(function(e) {
-    $proxyframe = $('#proxyframe');
-    
-    var int = setInterval(function() {
-      $proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
-    }, 1000);
-  });
   $("#test-config").click(function(e){
       $.fancybox.showActivity();
       $.ajax({
@@ -76,21 +68,27 @@ $(function() {
   var int, keyupHandle;
   
   int = setInterval(function() {
+    console.log($('#host-input').val());
     $proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
   }, 1000);
   
   function onIframeLoad() {
+    $('#step-1').addClass('complete');
+    $('#step-2').fadeIn();
     console.log('SUCCESS!');
     clearInterval(int);
 
     function checkSubdomain() {
+      console.log('checking subdomain');
       socket.emit('available', {
         subdomain: $('#subdomain-input').val()
       }, function(isAvailable) {
         if (isAvailable) {
+          $('#step-2').addClass('complete');
           $('#subdomain-status').removeClass('unavailable').addClass('available');
           $('#subdomain-submit').removeAttr('disabled');
         } else {
+          $('#step-2').removeClass('complete');
           $('#subdomain-status').removeClass('available').addClass('unavailable');
           $('#subdomain-submit').attr('disabled', 'disabled');
         }
@@ -154,8 +152,6 @@ $(function() {
   });
 
   window.addEventListener("message", function firstMessage() {
-    alert("Connected!");
-    
     onIframeLoad();
     window.removeEventListener('message', firstMessage);
     window.addEventListener("message", onProxyMessage);
