@@ -71,7 +71,7 @@ $(function() {
   int = setInterval(function() {
     console.log($('#host-input').val());
     proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
-  }, 1000);
+  }, 3000);
   
   function onIframeLoad() {
     var hostVal = $('#host-input').val(),
@@ -113,10 +113,20 @@ $(function() {
       }, function(success) {
         console.log('setup success', success);
         if (success) {
-          alert("You're all set");
+          setConnected();
         }
       });
     });
+  }
+  
+  var $cs = $("#connection-status");
+  
+  function setConnected(){
+    $cs.css({"background-color":"green"}).text("Connected");
+  }
+  
+  function setDisconnected(){
+    $cs.css({"background-color":"red"}).text("Disconnected - Please refresh your browser");
   }
   
   var subdomain,
@@ -150,8 +160,13 @@ $(function() {
     }
   });
 
+  socket.on('connect', function(data) {
+    console.log('Connected');
+  });
+
   socket.on('disconnect', function(data) {
     console.log('Disconnected');
+    setDisconnected();
   });
 
   window.addEventListener("message", function firstMessage() {

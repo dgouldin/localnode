@@ -927,3 +927,10 @@ div.go {
   font-size: 32px;
   padding: 5px;
 }
+
+#connection-status{
+    width: 400px;
+    height: 100px;
+    color: #fff;
+    text-align: center;
+}
