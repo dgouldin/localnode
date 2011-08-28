@@ -1,66 +1,146 @@
-<html> 
-<head>
-<style type="text/css">
-embed.hidden,
-object.hidden {
-    height: 1px;
-    width: 1px;
-    position: absolute;
-    top: -1000px;
-    left: -1000px;
-}
-</style>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LocalNode - Access to your localhost from everywhere</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href='http://fonts.googleapis.com/css?family=Delius+Swash+Caps|Gruppo|Ubuntu:400,400italic,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="validationEngine.jquery.css" />
+    	<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body>
+		   	<object
+		    id="socket_bridge" class="hidden"
+		    classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+		    codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0">
+				    <param name="movie" value="socket_bridge.swf?onloadcallback=test" />
+				    <param name="allowScriptAccess" value="always" />
+				    <embed
+				        class="hidden"
+				        src="socket_bridge.swf?onloadcallback=test"
+				        allowScriptAccess="always"
+				        type="application/x-shockwave-flash"
+				        pluginspage="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"> 
+				    </embed>
+				</object>
+        <div class="container_24">
+            <div class="top-bar">
+                <div class="grid_3 prefix_15">
+                    <p>
+                      <a href="home.html">Home</a>
+                    </p>
+                </div>
+                 <div class="grid_3">
+                    <p>
+                      <a href="proxy.html">Proxy</a>
+                    </p>
+                </div>
+                 <div class="grid_3">
+                    <p>
+                        <a href="http://nodeknockout.com/teams/return-of-the-starcr">About</a>
+                    </p>
+                </div>
+            <div>
+            <div class="clear"></div>
+            <div class="grid_24">
+                <div class="header">   
+                    <h1>
+                        <a href-"http://localno.de"> Localno.de </a>
+                    </h1>
+                </div>
+             </div>
+             <div class="grid_24">
+                <div class="product-description">
+                <h2>
+                    What?
+                </h2>
+                <p>
+                  Share your local web with anybody with no deployment to:
+                  <ul>
+                      <li>User test half-baked code</li>
+                      <li>Give QA a direct access to your machine</li>
+                      <li>Share your latest hack</li>
+                  </ul>
+                </p>
+                <h2>
+                    How?
+                </h2>
+                <p>
+                   <form id="subdomain-form" method="post" action="startproxy"> 
+                       <ol>
+                          <li><p>Enter your local host URL:
+                                <input id="localhost-input" value="http://127.0.0.1" class="validate[required,custom[url]]" type="text" name="subdomain" />
+                                </p>
+                          </li> 
+                          <li><p>Host <a id="example-config" href="example_localhost.html">the localnode.html file</a> on your server on <span class="nicer"><span id="server-address">http://127.0.0.1</span>/localnode.html</span> and <a id="test-config" href="testConfig">test it!</a></p></li>
+                          <li><p>Claim your subdomain:
+                                <input id="subdomain-input" placeholder="Subdomain" class="validate[required,custom[onlyLetterNumber],maxSize[20],ajax[ajaxSubdomain]]" type="text" name="subdomain" />
+                                </p>
+                          </li>
+                          <li><p><a id="proxy-start" href="proxy">Start Your Proxy at <span class="nicer" id="proxy-address">proxy.localno.de/myDomain</span></a></p></li>
+                       </ol>
+                   </form>
+                   Need <a id="howitworks-id" href="howitworks.png">More info</a>?
+                </p>
+                </div>
+            </div>
+            <div class="clear spacediv32"> dd</div>
 
-
-<head>
-<body>
-<object
-    id="socket_bridge" class="hidden"
-    classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
-    codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0">
-    <param name="movie" value="socket_bridge.swf?onloadcallback=test" />
-    <param name="allowScriptAccess" value="always" />
-    <embed
-        class="hidden"
-        src="socket_bridge.swf?onloadcallback=test"
-        allowScriptAccess="always"
-        type="application/x-shockwave-flash"
-        pluginspage="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"> 
-    </embed>
-</object>
-<textarea id="datapanel" style="width: 500px; height: 300px;">
-</textarea>
-<script type="text/javascript">
-function test() {
-  function request(msg, options, cb) {
-	  var s = new FlashSocket({
-	      on_data: function(data) {
-	          console.log(data.length);
-	        	console.log(data);
-	          document.getElementById('datapanel').value += atob(data);
-	      },
-	      on_io_error: function(msg) {
-	          console.log("IO ERROR: "+msg);
-	      },
-	      on_security_error: function(msg) {
-	          console.log("SECURITY ERROR: "+msg);
-	      },
-	      on_close: function(msg) {
-	        	console.log(msg);
-	          console.log("Connection closed.");
-	      },
-	      on_connect: function() {
-	          console.log('s1 connect');
-	          s.write(msg);
-	      }
-	  });
-	  s.connect('localdevno.de', 80);
-	  console.log(s);
-  }
-  request('GET /MellonHelmet.jpg\n\n', function(data) {
-    console.log(data);
-  });
-}
-</script>
-</body>
+              <div class="grid_12 explaining_video">
+                <iframe width="420" height="345" src="http://www.youtube.com/embed/AOnK3NVnxL8" frameborder="0" allowfullscreen></iframe>
+              </div>
+              <!-- end .grid_12 -->
+              <div class="grid_12">
+                <div class= "sign-div">
+                <p>
+                    <form id="signup-form" method="post" action="/signup">
+                        <div class="clear spacediv16"></div>
+                        <div class="grid_12 alpha omega">
+                            <div class="grid_6 alpha form-label">
+                                <span>Username</span>
+                            </div>
+                            <div class="grid_6 omega">
+                                <input id="username-input" placeholder="Username" value="" class="validate[minSize[6]]" type="text" name="username" />
+                            </div>
+                        </div>
+                        <div class="grid_12 alpha omega">
+                            <div class="grid_6 alpha form-label">
+                                <span>Email</span>
+                            </div>
+                            <div class="grid_6 omega">
+                                <input id="email-input" placeholder="Email" value="" class="validate[required,custom[email]]" type="text" name="email" />
+                            </div>
+                        </div>
+                        <div class="grid_12 alpha omega">
+                            <div class="grid_6 alpha form-label">
+                                <label>Password</label>
+                            </div>
+                            <div class="grid_6 omega">
+                                <input id="password-input" placeholder="Password" value="" class="validate[rminSize[6]]" type="password" name="pwd" />  
+                            </div>
+                        </div>
+                        <div class="clear spacediv16"></div>
+                        <div class="grid_3 push_8 alpha omega signup_button action_button">
+                            <span>Sign Up!</span>
+                        </div>
+                        <div class="clear spacediv16"></div>
+                        <input value="Sign Up!" type="submit" name="submit" style="display: none"/> 
+                    </form>
+                </p>
+                </div>
+              </div>
+            <!-- end .grid_12 -->
+            <div class="clear"></div>
+        </div>
+        <div id="footer">
+            
+        </div>
+        <script src="http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.2.min.js"  type="text/javascript" language="javascript"></script>
+        <script src="jquery.placeholder.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
+        <script src="jquery.validationEngine.js"  type="text/javascript" language="javascript"></script>
+        <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+        <script src="/socket.io.js" type="text/javascript" charset="utf-8"></script>
+        <script src="site.js"  type="text/javascript" language="javascript"></script>
+    </body>
 </html>
