@@ -1,0 +1,1 @@
+extern typedef UInt = Int

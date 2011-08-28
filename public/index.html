@@ -1,15 +1,66 @@
-<html>
+<html> 
 <head>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost');
-  socket.on('data', function (data) {
-    debugger;
-    socket.emit('clientData', { my: 'data' });
-  });
-</script>
-</head>
+<style type="text/css">
+embed.hidden,
+object.hidden {
+    height: 1px;
+    width: 1px;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+}
+</style>
+
+
+<head>
 <body>
-<h1>HELLO!</h1>
+<object
+    id="socket_bridge" class="hidden"
+    classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+    codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0">
+    <param name="movie" value="socket_bridge.swf?onloadcallback=test" />
+    <param name="allowScriptAccess" value="always" />
+    <embed
+        class="hidden"
+        src="socket_bridge.swf?onloadcallback=test"
+        allowScriptAccess="always"
+        type="application/x-shockwave-flash"
+        pluginspage="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"> 
+    </embed>
+</object>
+<textarea id="datapanel" style="width: 500px; height: 300px;">
+</textarea>
+<script type="text/javascript">
+function test() {
+  function request(msg, options, cb) {
+	  var s = new FlashSocket({
+	      on_data: function(data) {
+	          console.log(data.length);
+	        	console.log(data);
+	          document.getElementById('datapanel').value += atob(data);
+	      },
+	      on_io_error: function(msg) {
+	          console.log("IO ERROR: "+msg);
+	      },
+	      on_security_error: function(msg) {
+	          console.log("SECURITY ERROR: "+msg);
+	      },
+	      on_close: function(msg) {
+	        	console.log(msg);
+	          console.log("Connection closed.");
+	      },
+	      on_connect: function() {
+	          console.log('s1 connect');
+	          s.write(msg);
+	      }
+	  });
+	  s.connect('localdevno.de', 80);
+	  console.log(s);
+  }
+  request('GET /MellonHelmet.jpg\n\n', function(data) {
+    console.log(data);
+  });
+}
+</script>
 </body>
 </html>
