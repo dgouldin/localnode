@@ -7,4 +7,4 @@ if [[ $dir != $expected_dir ]] ; then
 fi
 rsync -avz --delete --exclude .git --delete-excluded . \
 	nko@nko:/home/nko/deploy
-ssh nko@nko 'sudo kill -9 `pgrep node` 2>/dev/null; sudo nohup node /home/nko/deploy/server.js & '
+echo "now restart on the server: ~/reload.sh"
