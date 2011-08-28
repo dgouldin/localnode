@@ -85,7 +85,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('response', function(data) {
-    var contentType = data.headers['content-type'],
+    var contentType = data.headers['content-type'] || 'application/octet-stream',
         buffer = new Buffer(data.content, 'base64'),
         res;
 
@@ -110,9 +110,19 @@ function proxyHandler(req, res, next) {
   debugger;
   var host = req.headers.host,
     token = Math.random(),
-    socket;
+    socket,
+    subdom = getSubDom(host);
 
-  socket = subdomToSocket[getSubDom(host)];
+  socket = subdomToSocket[subdom];
+  if (subdom && !socket) {
+    data = "<body>Please <a href='http://localno.de/'>configure the subdomain</a> first.</body>";
+    res.writeHead(200, {
+      'Content-Length': data.length,
+      'Content-Type': 'text/html',
+    });
+    res.end(data);
+    return;
+  }
   if (socket === undefined) return next();
 
   pendingResponses[token] = res;
