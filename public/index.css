@@ -757,7 +757,7 @@ li {
     padding: 8px 0;
 }
 
-.header {
+.header, #header {
     padding: 20px 0;    
 }
 
