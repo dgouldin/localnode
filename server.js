@@ -37,6 +37,13 @@ io.sockets.on('connection', function (sock) {
     var contentType = data.headers['content-type'],
         buffer = new Buffer(data.content, 'base64'),
         res;
+
+    // set text mimetypes to utf-8 charset
+    if(contentType.indexOf('text') === 0 && contentType.indexOf('charset') === -1) {
+      contentType += '; charset=utf-8';
+      data.headers['content-type'] = contentType;
+    }
+
     data.headers['content-length'] = buffer.length;
     console.log('socket.io response received');
 
@@ -69,7 +76,7 @@ function proxyHandler(req, res, next) {
     console.log(chunk);
     socket.emit('data', {
       token: token,
-      chunk: chunk
+      chunk: '' + chunk
     });
   });
   
