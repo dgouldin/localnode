@@ -35,19 +35,14 @@ io.sockets.on('connection', function (sock) {
   socket = sock;
   socket.on('response', function(data) {
     var contentType = data.headers['content-type'],
-        res, content;
+        buffer = new Buffer(data.content, 'base64'),
+        res;
+    data.headers['content-length'] = buffer.length;
     console.log('socket.io response received');
+
     res = pendingResponses[data.token];
-
-    if (data.content) {
-      content = data.content
-    } else {
-      content = new Buffer(data.dataUri, 'base64');
-    }
-
-    data.headers['content-length'] = content.length;
     res.writeHead(data.status, data.headers);
-    res.end(content);
+    res.end(buffer);
 
     delete pendingResponses[data.token];
   });

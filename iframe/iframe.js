@@ -68,38 +68,27 @@ $(document).ready(function() {
     console.log('request received', request);
     xhr.open(request.method, request.url);
     xhr.responseType = 'arraybuffer';
+    request.headers['cache-control'] = 'no-cache';
     $.each(request.headers, function(k, v) {
       xhr.setRequestHeader(k, v);
     });
     xhr.onload = function(e) {
-      console.log(this, e);
       var status = this.status,
           headers = parseHeaders(this.getAllResponseHeaders()),
           contentType = headers['content-type'] || 'text/plain',
-          isText = contentType.indexOf('text') === 0,
           content, response;
 
-      function sendResponse(result) {
-        var response = {
-          status: status,
-          headers: headers,
-          content: result.content,
-          dataUri: result.dataUri
-        };
-
-        sourceWindow.postMessage(JSON.stringify({
-          token: token,
-          response: response
-        }), TARGET_ORIGIN);
+      console.log(this.response);
+      var response = {
+        status: status,
+        headers: headers,
+        content: arrayBufferBase64(this.response, contentType),
       }
 
-      if (isText) {
-        sendResponse({content: this.responseText});
-      } else {
-        sendResponse({
-          dataUri: arrayBufferBase64(this.response, contentType)
-        });
-      }
+      sourceWindow.postMessage(JSON.stringify({
+        token: token,
+        response: response
+      }), TARGET_ORIGIN);
     }
     xhr.send(request.body);
   }, false);
