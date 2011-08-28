@@ -15,6 +15,12 @@ var port = 80,
     express.cookieParser(),
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
     function(req, res, next) {
+      if (req.headers.host.indexOf("localno.de") === -1) {
+        res.writeHead(301, {
+          'Location': "http://localno.de"
+        });
+        return;
+      }
       if (!isProduction || req.url !== "/localnode.html") {
         return next();
       }
