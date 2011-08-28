@@ -44,7 +44,11 @@ $("#subdomain-input").keyup(function(e){
 
 //$("#example-config").fancybox();
 $("#example-config").click(function(e) {
-  $(this).attr('href', 'http://localno.de/localnode.html?'+encodeURIComponent($('#host-input').val()));
+  var int, $proxyframe = $('#proxyframe');
+  
+  int = setInterval(function() {
+    $proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
+  }, 1000);
 });
 $("#test-config").click(function(e){
     $.fancybox.showActivity();
@@ -69,8 +73,45 @@ $("#howitworks-id").fancybox();
 
 
 $(function() {
+  var int, keyupHandle;
+  
+  int = setInterval(function() {
+    $proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
+  }, 1000);
+  
+  function onIframeLoad() {
+    console.log('SUCCESS!');
+    clearInterval(int);
+
+    function checkSubdomain() {
+      socket.emit('available', {
+        subdomain: $('#subdomain-input').val()
+      }, function(isAvailable) {
+        if (isAvailable) {
+          $('#subdomain-status').removeClass('unavailable').addClass('available');
+          $('#subdomain-submit').removeAttr('disabled');
+        } else {
+          $('#subdomain-status').removeClass('available').addClass('unavailable');
+          $('#subdomain-submit').attr('disabled', 'disabled');
+        }
+      });
+    }
+    $('#subdomain-input').bind('keyup', function() {
+      clearTimeout(keyupHandle);
+      keyupHandle = setTimeout(checkSubdomain, 200);
+    });
+
+    $('#subdomain-submit').click(function() {
+      socket.emit('setup', {
+        subdomain: $('#subdomain-input').val()
+      });
+    });
+  }
+  
+  
+  
+  
   window.request = function(msg, options, cb) {
-    var host = options.host || '127.0.0.1';
     var s = new FlashSocket({
         on_data: function(data) {
             console.log(data.length);
@@ -99,15 +140,9 @@ $(function() {
 //    console.log(data);
 //  });
   
-  
-  var host = '127.0.0.1';
-  var subdomain = 'crabdude';
-
-  $('#proxyframe').attr('src', host);
-
-  var socket = io.connect('http://localno.de'),
-      pendingRequests = {}, //TODO: send chunks via postMessage as we receive them
-      iframe = $('iframe').get(0);
+  var subdomain,
+    socket = io.connect('http://localno.de'),
+    pendingRequests = {}; //TODO: send chunks via postMessage as we receive them
 
   socket.on('headers', function(data) {
     console.log('headers message received');
@@ -135,8 +170,17 @@ $(function() {
     }
   });
 
-  window.addEventListener("message", function(e) {
+  window.addEventListener("message", function firstMessage() {
+    alert("Connected!");
+    
+    onIframeLoad();
+    window.removeEventListener('message', firstMessage);
+    window.addEventListener("message", onProxyMessage);
+  });
+  
+  function onProxyMessage(e) {
     console.log('proxy message received', e);
+    
     if (e.origin !== host) {
       return; // unauthorized
     }
@@ -146,7 +190,7 @@ $(function() {
     response.token = data.token;
     socket.emit('response', response);
 
-  });
+  }
 
   console.log("You're all set!");
   return false;
