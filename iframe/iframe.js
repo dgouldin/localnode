@@ -59,7 +59,7 @@ $(document).ready(function() {
           sendResponse({dataUri: e.target.result});
         }
         builder.append(this.response);
-        blob = builder.getBlob(contentType);
+        blob = builder.getBlob('application/octet-stream');
         reader.readAsDataURL(blob);
       }
     }

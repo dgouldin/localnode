@@ -34,11 +34,17 @@ server.all('*', function(req, res) {
 io.sockets.on('connection', function (sock) {
   socket = sock;
   socket.on('response', function(data) {
-    debugger;
+    var contentType = data.headers['content-type'],
+        base64;
     console.log('socket.io response received');
     res = pendingResponses[data.token];
     res.writeHead(data.status, data.headers);
-    res.end(data.content);
+    if (data.content) {
+      res.end(data.content);
+    } else {
+      base64 = data.dataUri.replace('data:' + contentType + ';base64,', '');
+      res.end(new Buffer(base64, 'base64').toString('binary'));
+    }
     delete pendingResponses[data.token];
   });
 });
