@@ -52,11 +52,20 @@ server.all('*', function(req, res) {
 
 // need to associate a socket with a subdomain
 
+var illegalSubdoms = {};
+"www proxy".split(" ").forEach(function(val) {
+  illegalSubdoms[val] = 1;
+});
+
 var subdomRE = /([^.]+)\..+\..+/;
 function getSubDom(host) {
   var m = subdomRE.exec(host);
   if (m) {
-    return m[1];
+    var subdom = m[1];
+    if (illegalSubdoms[subdom] !== undefined) {
+      return;
+    }
+    return subdom;
   }
 }
 
