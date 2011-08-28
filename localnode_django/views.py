@@ -20,6 +20,8 @@ def form_post(request):
             <table>{{ form }}</table>
             <input type='submit' value="that's me">
         </form>
+        <p>Oh, you wanted the helmet cat?</p>
+        <img src="/media/helmet_cat.png">
       </body>
     </html>
     """)
