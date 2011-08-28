@@ -1,5 +1,5 @@
 # Django settings for localnode_django project.
-
+import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -45,7 +45,9 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'static')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -140,5 +142,5 @@ LOGGING = {
         },
     }
 }
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
-MEDIA_ROOT = "/Users/dgouldin/node_knockout/rots/localnode_django/static/"
