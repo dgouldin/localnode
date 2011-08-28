@@ -7,4 +7,4 @@ if [[ $dir != $expected_dir ]] ; then
 fi
 rsync -avz --delete --exclude .git --delete-excluded . \
 	nko@nko:/home/nko/deploy
-echo "now restart on the server: ~/reload.sh"
+echo "now restart on the server: /home/nko/deploy/reload.sh"

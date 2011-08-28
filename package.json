@@ -1,5 +1,50 @@
 {
+  "name": "localno.de",
+  "description": "Share a LAN-addressable web resource to the internet without deploying.",
+  "version": "0.1.0",
+  "keywords": [],
+  "maintainers":[{
+   "name": "Adam Crabtree",
+   "email": "dude@noderiety.com",
+   "web": "https://github.com/crabdude"
+  }, {
+   "name": "Chris Cinelli",
+   "email": "chris@allestelle.com",
+   "twitter": "chriscinelli",
+   "web": "https://github.com/ChrisCinelli"
+  },
+  {
+    "name": "David Gouldin",
+    "email": "david@gould.in",
+    "web": "https://github.com/dgouldin"
+  },
+  {
+    "name": "Jeremy Dunck",
+    "email": "jdunck@gmail.com",
+    "web": "https://github.com/jdunck"
+  }],
+  "licenses": [
+  {
+     "type": "BSD",
+     "url": "http://www.opensource.org/licenses/bsd-license.php"
+  }],
+  "repositories": [
+       {
+            "type": "git",
+            "url": "git@github.com:nko2/return-of-the-starcr.git",
+            "path": "/"
+       }
+    ],
+  "engines": { "node": "*" },
   "dependencies": {
     "nko": "*",
+    "creationix": "0.1.5",
+    "express": "2.4.6",
+    "simple-mime": "0.0.3",
+    "socket.io": "0.7.11",
+    "socket.io-client": "0.7.9",
+    "step": "0.0.4",
+    "underscore": "1.1.7",
+    "underscore.string": "1.1.6"
   }
 }

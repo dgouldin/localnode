@@ -62,8 +62,6 @@ server.all('*', function(req, res) {
   res.end('I AM LOCALNODE!');
 });
 
-// need to associate a socket with a subdomain
-
 var illegalSubdoms = {};
 "www proxy".split(" ").forEach(function(val) {
   illegalSubdoms[val] = 1;
@@ -81,11 +79,6 @@ function getSubDom(host) {
   }
 }
 
-// todo: have setup send a token which we can then use
-// to test if an existing tab's socket is still live
-// for a given subdomain.
-//  this would let us prompt for them to reload the tab
-//  if node crashes/restarts.
 io.sockets.on('connection', function (socket) {
   socket.on('available', function(data, ret) {
       ret(subdomToSocket[data.subdomain] === undefined);
