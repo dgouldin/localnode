@@ -1,4 +1,4 @@
-var socket,
+var subdomToSocket = {},
   _ = require('underscore'),
   nko = require('nko'),
   express = require('express'),
@@ -14,7 +14,7 @@ var socket,
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
     express.static(__dirname + '/public')
   ),
-  io = require('socket.io').listen(server);
+  io = require('socket.io').listen(server),
 
 _.mixin(require('underscore.string'));
   
@@ -44,8 +44,39 @@ server.all('*', function(req, res) {
 });
 
 // need to associate a socket with a subdomain
-io.sockets.on('connection', function (sock) {
-  socket = sock;
+
+var subdomRE = /([^.])\..+\..+/;
+function getSubDom(host) {
+  var m = subdomRE.exec(host);
+  if (m) {
+    return m[1];
+  }
+}
+
+// todo: have setup send a token which we can then use
+// to test if an existing tab's socket is still live
+// for a given subdomain.
+//  this would let us prompt for them to reload the tab
+//  if node crashes/restarts.
+io.sockets.on('connection', function (socket) {
+  socket.on('available', function(data, ret) {
+      ret(subdomToSocket[data.subdomain] === undefined);
+  });
+
+  socket.on('setup', function(data, ret) {
+    socket.subdomain = data.subdomain;
+    if (undefined === subdomToSocket[socket.subdomain]) {
+      ret(false);
+      return;
+    }
+    subdomToSocket[socket.subdomain] = socket;
+    ret(true);
+  });
+
+  socket.on('disconnect', function () {
+    delete subdomToSocket[socket.subdomain];
+  });
+
   socket.on('response', function(data) {
     var contentType = data.headers['content-type'],
         buffer = new Buffer(data.content, 'base64'),
@@ -68,14 +99,16 @@ io.sockets.on('connection', function (sock) {
   });
 });
 
-
 function proxyHandler(req, res, next) {
   var host = req.headers.host,
-    token = Math.random();
+    token = Math.random(),
+    socket;
+
+  socket = subdomToSocket[getSubDom(host)];
+  if (socket === undefined) return next();
 
   pendingResponses[token] = res;
   // TODO: delete response on timeout
-  if (host.split('.').length <= 2) return next();
 
   console.log('headers');
   socket.emit('headers', {
