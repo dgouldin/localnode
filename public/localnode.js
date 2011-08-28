@@ -66,11 +66,7 @@ $(function() {
         token = data.token,
         request = data.request;
     
-    if (request.method) {
-      doXHR();
-    } else {
-      doSocket();
-    }
+    doXHR();
     
     function doXHR() {
       var xhr = new XMLHttpRequest();

@@ -1,5 +1,6 @@
 $(function() {
-  var $proxyframe = $('#proxyframe');
+  var proxyframe = $('#proxyframe'),
+      host;
   
   //See https://github.com/posabsolute/jQuery-Validation-Engine (for validation)
   var ajaxSubdomain = {
@@ -69,10 +70,17 @@ $(function() {
   
   int = setInterval(function() {
     console.log($('#host-input').val());
-    $proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
+    proxyframe.attr('src', 'http://'+$('#host-input').val()+'/localnode.html');
   }, 1000);
   
   function onIframeLoad() {
+    var hostVal = $('#host-input').val(),
+        hostValSlash = hostVal.indexOf('/');
+    if (hostValSlash == -1) {
+      hostValSlash = undefined;
+    }
+    host = 'http://' + hostVal.substr(0, hostValSlash);
+
     $('#step-1').addClass('complete');
     $('#step-2').fadeIn();
     console.log('SUCCESS!');
@@ -102,6 +110,11 @@ $(function() {
     $('#subdomain-submit').click(function() {
       socket.emit('setup', {
         subdomain: $('#subdomain-input').val()
+      }, function(success) {
+        console.log('setup success', success);
+        if (success) {
+          alert("You're all set");
+        }
       });
     });
   }
@@ -112,41 +125,27 @@ $(function() {
 
   socket.on('headers', function(data) {
     console.log('headers message received');
-    if (data.method) {
-      pendingRequests[data.token] = {
-        token: data.token,
-        request: {
-          url: data.url,
-          method: data.method,
-          headers: data.headers,
-          body: ''
-        }
-      };
-    } else {
-      pendingRequests[data.token] = {
-        token: data.token,
-        request: data.request,
+    pendingRequests[data.token] = {
+      token: data.token,
+      request: {
         url: data.url,
-        port: data.port
-      };
-    }
-    
+        method: data.method,
+        headers: data.headers,
+        body: ''
+      }
+    };
   });
-  
+
   socket.on('data', function(data) {
     console.log('data message received');
     if (pendingRequests[data.token]) {
-      if (pendingRequests[data.token].method) {
-        pendingRequests[data.token].request.body += data.chunk;
-      } else {
-        pendingRequests[data.token].request += data.chunk;
-      }
+      pendingRequests[data.token].request.body += data.chunk;
     }
   });
   socket.on('end', function (data) {
     console.log('end message received');
     if (pendingRequests[data.token]) {
-      iframe.contentWindow.postMessage(
+      proxyframe.get(0).contentWindow.postMessage(
           JSON.stringify(pendingRequests[data.token]), host);
     }
   });
