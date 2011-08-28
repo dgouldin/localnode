@@ -10,10 +10,6 @@ var port = 80,
   pendingResponses = {};
   server = express.createServer(
 //    express.logger(),
-    proxyHandler,
-    express.bodyParser(),
-    express.cookieParser(),
-    express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
     function(req, res, next) {
       if (req.headers.host.indexOf("localno.de") === -1) {
         res.writeHead(302, {
@@ -22,6 +18,13 @@ var port = 80,
         res.end();
         return;
       }
+      return next();
+    },
+    proxyHandler,
+    express.bodyParser(),
+    express.cookieParser(),
+    express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
+    function(req, res, next) {
       if (!isProduction || req.url !== "/localnode.html") {
         return next();
       }
