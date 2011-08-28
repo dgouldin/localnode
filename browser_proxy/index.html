@@ -1,15 +1,22 @@
 <html>
   <head>
+    <style>
+      iframe {
+        height: 1px;
+        width: 1px;
+      }
+    </style>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   </head>
   <body>
-    <iframe src="http://iframe.localno.de:8000/iframe.html"></iframe>
+    <iframe></iframe>
+    <div id="inputs">
+      <p>iframe source: <input type="text" id="iframe-src"></p>
+      <p>local hostname: <input type="text" id="iframe-host"></p>
+      <button id="set-iframe-src">set local url</button>
+    </div>
     <script type="text/javascript" src="jquery.min.js"></script>
     <script src="socket.io.min.js"></script>
     <script type="text/javascript" src="proxy.js"></script>
-    <script>
-      // The user will set their desired origin.
-      var TARGET_ORIGIN = 'http://iframe.localno.de:8000';
-    </script>
   </body>
 </html>
