@@ -15,7 +15,7 @@ var port = 80,
     express.cookieParser(),
     express.session({ key: 'skey', secret: '1ts-s3cr3t!'}),
     function(req, res, next) {
-      if (isProduction || req.url !== "/localnode.html") {
+      if (!isProduction || req.url !== "/localnode.html") {
         return next();
       }
       res.setHeader("Content-Disposition", "attachment; filename=localnode.html");
