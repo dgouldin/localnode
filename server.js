@@ -25,6 +25,17 @@ nko('II/wSAPh+H5/zPP2', function(err, res) {
   res.on('data', function(d) { console.log(d.toString()); });
 });
 
+server.get('/localnode.html', function(req, res) {
+  fs.readFile(__dirname + '/public/localnode.tpl', function(err, data) {
+    var content = (''+data).replace('TARGET_HOST', req.query.host);
+    console.log(content);
+    res.writeHead(200, {
+      'Content-Length': data.length,
+      'Content-Type': 'application/octet-stream'
+    });
+    res.end(content);
+  });
+});
 server.listen(80);
 
 server.all('*', function(req, res) {

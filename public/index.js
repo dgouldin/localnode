@@ -42,7 +42,10 @@ $("#subdomain-input").keyup(function(e){
 });
 
 
-$("#example-config").fancybox();
+//$("#example-config").fancybox();
+$("#example-config").click(function(e) {
+  $(this).attr('href', 'http://localno.de/localnode.html?'+encodeURIComponent($('#host-input').val()));
+});
 $("#test-config").click(function(e){
     $.fancybox.showActivity();
     $.ajax({
@@ -100,7 +103,7 @@ $(function() {
   var host = '127.0.0.1';
   var subdomain = 'crabdude';
 
-  $('iframe').attr('src', host);
+  $('#proxyframe').attr('src', host);
 
   var socket = io.connect('http://localno.de'),
       pendingRequests = {}, //TODO: send chunks via postMessage as we receive them

@@ -845,3 +845,9 @@ object.hidden {
     top: -1000px;
     left: -1000px;
 }
+
+#proxyframe {
+	  height: 1px;
+	  width: 1px;
+		visibility: hidden;
+}
