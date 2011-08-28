@@ -929,8 +929,10 @@ div.go {
 }
 
 #connection-status{
-    width: 400px;
-    height: 100px;
-    color: #fff;
+    margin: 3px auto;
+    padding: 20px 0;
+    width:  400px;
+    color:  #fff;
     text-align: center;
+    border-radius: 15px;
 }

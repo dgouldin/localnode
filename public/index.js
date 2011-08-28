@@ -127,6 +127,8 @@ $(function() {
   
   function setDisconnected(){
     $cs.css({"background-color":"red"}).text("Disconnected - Please refresh your browser");
+    $('#subdomain-status').removeClass('unavailable').addClass('available');
+    $('#step-1').removeClass('complete');
   }
   
   var subdomain,
